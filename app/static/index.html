@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="AI-оператор внутренней IT-поддержки ВекторЛаб">
+    <title>AI-оператор IT-поддержки — ВекторЛаб</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="ВекторЛаб — на главную">
+          <span class="brand-mark" aria-hidden="true">VL</span>
+          <span>
+            <strong>ВекторЛаб</strong>
+            <small>Внутренняя IT-поддержка</small>
+          </span>
+        </a>
+        <span class="system-state"><i aria-hidden="true"></i> База знаний подключена</span>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <p class="eyebrow">RAG · Vector + BM25 + RRF</p>
+          <h1 id="page-title">AI-оператор IT-поддержки</h1>
+          <p class="hero-copy">
+            Задайте вопрос о корпоративных системах. Ответ будет сформирован только
+            по внутренней базе знаний с указанием использованных источников.
+          </p>
+
+          <form id="ask-form" class="ask-card">
+            <label for="question">Ваш вопрос</label>
+            <textarea
+              id="question"
+              name="question"
+              rows="4"
+              maxlength="2000"
+              placeholder="Например: Что делать при ошибке VPN-1207?"
+              required
+            ></textarea>
+            <div class="form-footer">
+              <span class="keyboard-hint">Enter — отправить · Shift+Enter — новая строка</span>
+              <button id="submit-button" type="submit">
+                <span>Спросить</span>
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M3 10h13M11 5l5 5-5 5"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <div class="examples" aria-label="Примеры вопросов">
+            <span>Попробуйте:</span>
+            <button type="button" data-question="Что делать при VPN-1207?">VPN-1207</button>
+            <button type="button" data-question="Потерял рабочий ноутбук в командировке. Что делать?">Потерянный ноутбук</button>
+            <button type="button" data-question="Меня слышат на совещании, но я не слышу коллег. Что проверить?">Нет звука</button>
+          </div>
+        </section>
+
+        <section id="loading" class="loading-panel" hidden aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          <div>
+            <strong>Поиск и формирование ответа…</strong>
+            <p>Проверяем Vector Search, BM25 и итоговый контекст.</p>
+          </div>
+        </section>
+
+        <section id="error-panel" class="message-panel error-panel" hidden role="alert">
+          <strong>Не удалось получить ответ</strong>
+          <p id="error-message"></p>
+        </section>
+
+        <section id="result" class="result-stack" hidden aria-live="polite">
+          <article class="answer-card">
+            <div class="answer-heading">
+              <div>
+                <p class="section-kicker">Итоговый ответ</p>
+                <h2>Рекомендация</h2>
+              </div>
+              <span id="answer-status" class="status-badge"></span>
+            </div>
+            <p id="answer-text" class="answer-text"></p>
+          </article>
+
+          <section class="sources-card" aria-labelledby="sources-title">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Подтверждение</p>
+                <h2 id="sources-title">Источники</h2>
+              </div>
+              <span id="sources-count" class="count-badge"></span>
+            </div>
+            <div id="sources-list" class="sources-list"></div>
+            <p id="sources-empty" class="empty-note" hidden>Источники не использованы.</p>
+          </section>
+
+          <details id="diagnostics" class="diagnostics-card">
+            <summary>
+              <span>
+                <small>PRO-диагностика</small>
+                <strong>Диагностика поиска</strong>
+              </span>
+              <span class="summary-action">Показать pipeline</span>
+            </summary>
+            <div class="diagnostics-body">
+              <ol class="pipeline" aria-label="Этапы RAG pipeline">
+                <li>Vector</li>
+                <li>BM25</li>
+                <li>RRF</li>
+                <li>Контекст</li>
+                <li>Ответ</li>
+              </ol>
+
+              <section class="diagnostic-section" aria-labelledby="vector-title">
+                <h3 id="vector-title">Vector Search</h3>
+                <p>Семантическая близость локальных embeddings.</p>
+                <div id="vector-table" class="table-wrap"></div>
+              </section>
+
+              <section class="diagnostic-section" aria-labelledby="bm25-title">
+                <h3 id="bm25-title">BM25 Search</h3>
+                <p>Лексические совпадения; нулевой score исключается из fusion.</p>
+                <div id="bm25-table" class="table-wrap"></div>
+              </section>
+
+              <section class="diagnostic-section" aria-labelledby="hybrid-title">
+                <h3 id="hybrid-title">Hybrid / RRF</h3>
+                <p>Дедупликация и объединение рангов двух каналов.</p>
+                <div id="hybrid-table" class="table-wrap"></div>
+              </section>
+
+              <section class="diagnostic-section" aria-labelledby="context-title">
+                <h3 id="context-title">Контекст LLM</h3>
+                <p>Final Top-K, переданный модели без диагностических scores.</p>
+                <div id="context-list" class="context-list"></div>
+              </section>
+            </div>
+          </details>
+        </section>
+      </main>
+
+      <footer>
+        <span>ВекторЛаб · Учебный контур внутренней поддержки</span>
+        <span>Ответы ограничены базой знаний</span>
+      </footer>
+    </div>
+  </body>
+</html>
