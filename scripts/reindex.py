@@ -1,4 +1,4 @@
-"""Полностью перестроить чанки, локальные embeddings и FAISS-индекс."""
+"""Перестроить чанки и независимые FAISS- и BM25-индексы."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from app.config import load_settings  # noqa: E402
+from app.rag.bm25_index import save_bm25_index  # noqa: E402
 from app.rag.chunk_builder import build_chunks, write_chunks_json  # noqa: E402
 from app.rag.local_embeddings import LocalEmbeddingModel, chunk_embedding_text  # noqa: E402
 from app.rag.vector_index import save_vector_index  # noqa: E402
@@ -24,7 +25,7 @@ from app.rag.vector_index import save_vector_index  # noqa: E402
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Перестроить локальный semantic-search индекс ВекторЛаб."
+        description="Перестроить локальные FAISS- и BM25-индексы ВекторЛаб."
     )
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--model", help="Переопределить локальную embedding-модель.")
@@ -51,6 +52,7 @@ def main() -> int:
             vectors,
             model_name=model_name,
         )
+        bm25_manifest = save_bm25_index(settings.storage_dir, chunks)
     except Exception as exc:
         print(f"ОШИБКА ИНДЕКСАЦИИ: {exc}", file=sys.stderr)
         return 1
@@ -60,7 +62,18 @@ def main() -> int:
     print(f"Embedding-модель: {manifest['embedding_model']}")
     print(f"Размерность embeddings: {manifest['embedding_dimension']}")
     print(f"FAISS-индекс: {manifest['index_type']}")
-    for filename in ("chunks.json", "faiss.index", "faiss_mapping.json", "vector_manifest.json"):
+    print(
+        f"BM25 corpus: {bm25_manifest['corpus_size']} чанков, "
+        f"{bm25_manifest['tokenizer']}"
+    )
+    for filename in (
+        "chunks.json",
+        "faiss.index",
+        "faiss_mapping.json",
+        "vector_manifest.json",
+        "bm25_corpus.json",
+        "bm25_manifest.json",
+    ):
         path = settings.storage_dir / filename
         print(f"  {filename}: {path.stat().st_size} байт")
     return 0
