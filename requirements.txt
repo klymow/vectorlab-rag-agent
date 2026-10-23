@@ -6,6 +6,7 @@ rank-bm25
 numpy
 tiktoken
 python-dotenv
+groq
 pytest
 httpx
 
