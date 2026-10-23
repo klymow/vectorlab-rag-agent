@@ -17,11 +17,26 @@ DEFAULT_EMBEDDING_MODEL = (
 
 @dataclass(frozen=True, slots=True)
 class Settings:
-    """Настройки локального контура embeddings и хранения индекса."""
+    """Настройки локальных retrieval-каналов и hybrid pipeline."""
 
     embedding_model: str
     documents_dir: Path
     storage_dir: Path
+    vector_top_n: int
+    bm25_top_n: int
+    rrf_k: int
+    final_top_k: int
+
+
+def _positive_int(name: str, default: int) -> int:
+    raw_value = os.getenv(name, str(default)).strip()
+    try:
+        value = int(raw_value)
+    except ValueError as exc:
+        raise ValueError(f"{name} должен быть целым числом, получено {raw_value!r}") from exc
+    if value <= 0:
+        raise ValueError(f"{name} должен быть положительным, получено {value}")
+    return value
 
 
 def load_settings(env_path: Path | None = None) -> Settings:
@@ -36,5 +51,9 @@ def load_settings(env_path: Path | None = None) -> Settings:
         embedding_model=model_name,
         documents_dir=PROJECT_ROOT / "knowledge_base" / "documents",
         storage_dir=PROJECT_ROOT / "storage",
+        vector_top_n=_positive_int("VECTOR_TOP_N", 8),
+        bm25_top_n=_positive_int("BM25_TOP_N", 8),
+        rrf_k=_positive_int("RRF_K", 60),
+        final_top_k=_positive_int("FINAL_TOP_K", 5),
     )
 

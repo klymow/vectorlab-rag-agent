@@ -34,9 +34,9 @@ tests/                       контрольные вопросы и автом
 
 ## Текущий статус
 
-Завершён этап 4: поверх 62 смысловых чанков работают два независимых retrieval-канала. Semantic Search использует локальную модель `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` и точный FAISS `IndexFlatIP`. Лексический поиск использует `BM25Okapi` и прозрачную токенизацию с lowercase, нормализацией `ё` → `е` и сохранением дефисных технических кодов. Документы не передаются во внешние API.
+Завершён этап 5: поверх 62 смысловых чанков работают два независимых retrieval-канала. Semantic Search использует локальную модель `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` и точный FAISS `IndexFlatIP`. Лексический поиск использует `BM25Okapi` и прозрачную токенизацию с lowercase, нормализацией `ё` → `е` и сохранением дефисных технических кодов. Результаты каналов дедуплицируются по `chunk_id` и объединяются через Reciprocal Rank Fusion без смешивания raw scores. BM25-результаты с неположительным score в fusion не участвуют. Документы не передаются во внешние API.
 
-Команда `python scripts/reindex.py` полностью перестраивает чанки, embeddings, FAISS и воспроизводимый BM25 corpus. Диагностические команды: `python scripts/search_vector.py "текст вопроса" --top-n 5` и `python scripts/search_bm25.py "VPN-1207" --top-n 5`. Все генерируемые файлы в `storage/` остаются исключёнными из Git.
+Команда `python scripts/reindex.py` полностью перестраивает чанки, embeddings, FAISS и воспроизводимый BM25 corpus. Диагностические команды отдельных каналов: `python scripts/search_vector.py "текст вопроса" --top-n 5` и `python scripts/search_bm25.py "VPN-1207" --top-n 5`. Полный retrieval pipeline проверяется через `python scripts/search_hybrid.py "текст вопроса"`. Все генерируемые файлы в `storage/` остаются исключёнными из Git.
 
-RRF, подключение LLM, FastAPI и веб-интерфейс пока не реализованы. Настройки Groq зарезервированы для будущего этапа и в retrieval не используются.
+Подключение LLM, no-answer решение, FastAPI и веб-интерфейс пока не реализованы. Настройки Groq зарезервированы для будущего этапа и в retrieval не используются.
 
