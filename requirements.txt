@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+openai
+faiss-cpu
+rank-bm25
+numpy
+tiktoken
+python-dotenv
+pytest
+httpx
+

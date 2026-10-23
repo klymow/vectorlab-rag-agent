@@ -1,0 +1,34 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Generated search artifacts
+storage/*
+!storage/.gitkeep
+
+# Source assignment documents are kept locally only
+*.docx
+
+# Temporary and editor files
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+~$*
+.tmp/
+.tmp-chatgpt/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
