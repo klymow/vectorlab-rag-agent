@@ -1,0 +1,77 @@
+[
+  {
+    "question": "Что делать при ошибке VPN-1207 после смены пароля?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-001"]
+  },
+  {
+    "question": "Я потерял телефон с VectorID. Как восстановить MFA?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-002"]
+  },
+  {
+    "question": "Что означает ошибка Outlook 0x8004010F?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-003"]
+  },
+  {
+    "question": "Ноутбук показывает WIFI-EAP-17. Что проверить?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-004"]
+  },
+  {
+    "question": "Что означает ошибка FS-403 и какие данные указать в заявке?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-005"]
+  },
+  {
+    "question": "Задание не появляется на корпоративном принтере. Что делать?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-006"]
+  },
+  {
+    "question": "Можно ли самостоятельно установить программу с правами администратора?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-007"]
+  },
+  {
+    "question": "Меня слышат на совещании, но я не слышу коллег. Что проверить?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-008"]
+  },
+  {
+    "question": "Как исправить ORION-DB-104 после обновления Orion ERP?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-009"]
+  },
+  {
+    "question": "Потерял заблокированный рабочий ноутбук. Что делать и какой приоритет?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-010", "VL-IT-012"]
+  },
+  {
+    "question": "Как восстановить предыдущую версию файла из сетевой папки?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-011"]
+  },
+  {
+    "question": "Когда инциденту назначается приоритет P1?",
+    "expected_status": "sufficient",
+    "expected_document_ids": ["VL-IT-012"]
+  },
+  {
+    "question": "Как исправить CRM-999?",
+    "expected_status": "insufficient",
+    "expected_document_ids": []
+  },
+  {
+    "question": "Как настроить корпоративный Slack на личном телефоне?",
+    "expected_status": "insufficient",
+    "expected_document_ids": []
+  },
+  {
+    "question": "Какой пароль от Wi-Fi у гостевого офиса в Берлине?",
+    "expected_status": "insufficient",
+    "expected_document_ids": []
+  }
+]
