@@ -19,7 +19,7 @@ const hybridTable = document.querySelector("#hybrid-table");
 const contextList = document.querySelector("#context-list");
 
 function updateQuestionCounter() {
-  questionCounter.textContent = `${questionInput.value.length} / 1999`;
+  questionCounter.textContent = `${questionInput.value.length} / 2000`;
 }
 
 function setLoading(isLoading) {
