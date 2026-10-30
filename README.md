@@ -42,6 +42,7 @@ tests/                        unit/API-тесты и контрольные во
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip install -r requirements-local.txt -r requirements-dev.txt
 Copy-Item .env.example .env
 ```
 

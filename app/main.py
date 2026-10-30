@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from threading import Lock
 from typing import Protocol
 
@@ -11,7 +12,6 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 
 from .config import PROJECT_ROOT
-from .rag.factory import build_rag_service
 
 
 STATIC_DIR = PROJECT_ROOT / "app" / "static"
@@ -42,9 +42,13 @@ class LazyServiceProvider:
         self._lock = Lock()
 
     def get(self) -> RAGServiceProtocol:
+        if os.getenv("VERCEL") == "1" or os.getenv("RAG_MODE") == "deployment":
+            raise RuntimeError("Локальный RAG отключён в deployment mode")
         if self._service is None:
             with self._lock:
                 if self._service is None:
+                    from .rag.factory import build_rag_service
+
                     self._service = build_rag_service()
         return self._service
 
