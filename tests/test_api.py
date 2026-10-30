@@ -199,6 +199,16 @@ class APITests(unittest.TestCase):
         self.assertNotIn("innerHTML", script)
         self.assertIn("answerText.textContent", script)
 
+    def test_question_character_counter_is_configured(self) -> None:
+        html = (PROJECT_ROOT / "app" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (PROJECT_ROOT / "app" / "static" / "app.js").read_text(encoding="utf-8")
+        self.assertIn('id="question-counter"', html)
+        self.assertIn('maxlength="2000"', html)
+        self.assertIn('>0 / 2000<', html)
+        self.assertIn('questionCounter.textContent = `${questionInput.value.length} / 2000`;', script)
+        self.assertIn('questionInput.addEventListener("input", updateQuestionCounter);', script)
+        self.assertIn('updateQuestionCounter();', script)
+
 
 if __name__ == "__main__":
     unittest.main()

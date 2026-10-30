@@ -2,6 +2,7 @@
 
 const form = document.querySelector("#ask-form");
 const questionInput = document.querySelector("#question");
+const questionCounter = document.querySelector("#question-counter");
 const submitButton = document.querySelector("#submit-button");
 const loadingPanel = document.querySelector("#loading");
 const errorPanel = document.querySelector("#error-panel");
@@ -16,6 +17,10 @@ const vectorTable = document.querySelector("#vector-table");
 const bm25Table = document.querySelector("#bm25-table");
 const hybridTable = document.querySelector("#hybrid-table");
 const contextList = document.querySelector("#context-list");
+
+function updateQuestionCounter() {
+  questionCounter.textContent = `${questionInput.value.length} / 2000`;
+}
 
 function setLoading(isLoading) {
   loadingPanel.hidden = !isLoading;
@@ -207,9 +212,13 @@ questionInput.addEventListener("keydown", (event) => {
   }
 });
 
+questionInput.addEventListener("input", updateQuestionCounter);
+updateQuestionCounter();
+
 document.querySelectorAll("[data-question]").forEach((button) => {
   button.addEventListener("click", () => {
     questionInput.value = button.dataset.question || "";
+    updateQuestionCounter();
     questionInput.focus();
   });
 });

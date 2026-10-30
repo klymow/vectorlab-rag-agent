@@ -188,6 +188,17 @@ textarea:focus {
   box-shadow: inset 0 0 0 2px rgba(23, 107, 135, 0.36);
 }
 
+.question-meta {
+  display: flex;
+  justify-content: flex-end;
+  padding: 7px 8px 0;
+}
+
+.question-counter {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .form-footer {
   display: flex;
   align-items: center;
